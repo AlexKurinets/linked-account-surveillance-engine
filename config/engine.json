@@ -1,0 +1,71 @@
+{
+  "state": {
+    "short_half_life_minutes": 60,
+    "long_half_life_minutes": 1440,
+    "device_window_days": 7,
+    "ip_window_hours": 24
+  },
+  "scoring": {
+    "intercept_prior_mean": -3.0,
+    "intercept_prior_sd": 2.0,
+    "weight_prior_sd": 1.0,
+    "extra_features": [
+      { "name": "anomaly", "prior_mean": 0.5, "description": "rarity of the isolation forest score: -log10 of the share of accounts scoring higher (0 near the median, 2 at the top 1%)" },
+      { "name": "linked", "prior_mean": 1.0, "description": "1 if the account sits in a linked cluster" },
+      { "name": "cluster_internal_share", "prior_mean": 1.0, "description": "share of the cluster's fill notional traded between its own members" }
+    ],
+    "interval_z": 1.2816
+  },
+  "anomaly": {
+    "features": [
+      "log_orders_1h",
+      "cancel_ratio_1h",
+      "log_fill_notional_24h",
+      "off_index_bps_24h",
+      "top_counterparty_share_24h",
+      "withdraw_ratio_24h",
+      "devices_7d",
+      "log_account_age_days"
+    ],
+    "n_trees": 200,
+    "max_samples": 256,
+    "train_window_days": 7
+  },
+  "alerts": {
+    "daily_budget": 40,
+    "initial_threshold": 0.5,
+    "threshold_floor": 0.4,
+    "threshold_window_days": 7,
+    "cluster_cooldown_hours": 24,
+    "cooldown_override_rise": 0.15,
+    "rejected_suppression_days": 7,
+    "anomaly_lane": { "daily_budget": 5, "min_rarity": 2.5 }
+  },
+  "linking": {
+    "rarity_weighting": true,
+    "identifier_cap": 25,
+    "ip_coincidence_seconds": 600,
+    "handoff_seconds": 120,
+    "handoff_min_count": 3,
+    "pair_fill_min_count": 3,
+    "family_min_score": 1.5,
+    "link_threshold": 5.0,
+    "require_two_families": true,
+    "max_cluster_size": 10,
+    "coactivity": {
+      "window_days": 7,
+      "stop_minute_quantile": 0.995,
+      "alpha": 0.01,
+      "min_shared_minutes": 3
+    }
+  },
+  "outcomes": {
+    "audit_base_rate": 0.03,
+    "audit_near_threshold_rate": 0.3,
+    "verdict_noise": 0.03,
+    "audit_verdict_noise": 0.005,
+    "recall_window_days": 7,
+    "shadow_days": 2,
+    "shadow_min_cases": 30
+  }
+}

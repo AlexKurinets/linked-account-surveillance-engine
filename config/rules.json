@@ -1,0 +1,48 @@
+{
+  "version": "rules-v1",
+  "note": "Written by the analysts. Each rule is a list of conditions on account features that must all hold. 'weight' is the analysts' starting log-odds for the rule; the nightly refit starts from it and moves only as far as verdicts justify.",
+  "rules": [
+    {
+      "id": "off_index_fills",
+      "description": "Average fill price more than 80 bps off the index on more than $20,000 of decayed 24-hour notional",
+      "all": [
+        { "feature": "off_index_bps_24h", "op": ">", "value": 80 },
+        { "feature": "fill_notional_24h", "op": ">", "value": 20000 }
+      ],
+      "weight": 2.0
+    },
+    {
+      "id": "concentrated_counterparty",
+      "description": "Half or more of 24-hour fill notional against one counterparty, on more than $10,000",
+      "all": [
+        { "feature": "top_counterparty_share_24h", "op": ">=", "value": 0.5 },
+        { "feature": "fill_notional_24h", "op": ">", "value": 10000 }
+      ],
+      "weight": 2.5
+    },
+    {
+      "id": "fast_in_out",
+      "description": "Withdrew most of what was deposited within 90 minutes of the deposit",
+      "all": [
+        { "feature": "withdraw_ratio_24h", "op": ">", "value": 0.8 },
+        { "feature": "in_out_minutes", "op": "<", "value": 90 }
+      ],
+      "weight": 2.0
+    },
+    {
+      "id": "many_devices",
+      "description": "Three or more devices in seven days",
+      "all": [{ "feature": "devices_7d", "op": ">=", "value": 3 }],
+      "weight": 3.0
+    },
+    {
+      "id": "new_account_volume",
+      "description": "Account under seven days old with more than $50,000 of decayed 24-hour notional",
+      "all": [
+        { "feature": "account_age_days", "op": "<", "value": 7 },
+        { "feature": "fill_notional_24h", "op": ">", "value": 50000 }
+      ],
+      "weight": 1.5
+    }
+  ]
+}

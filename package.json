@@ -1,0 +1,30 @@
+{
+  "name": "linked-account-surveillance-engine",
+  "version": "1.0.0",
+  "description": "Live account scoring, account linking and an unattended report agent on Postgres. Synthetic data.",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "cli": "node dist/cli.js"
+  },
+  "author": "Alex Kurinets",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.12.0",
+    "fastify": "^5.12.8",
+    "pg": "^8.23.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.2",
+    "@types/pg": "^8.23.1",
+    "typescript": "^5.9.3",
+    "vitest": "^5.1.1"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  }
+}
